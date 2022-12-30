@@ -8,6 +8,8 @@ import {
 }from 'react-native'
 
 import {Feather} from '@expo/vector-icons'
+import { colors } from "../../themes/Theme";
+
 
 const StatusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 22 : 64;
 
@@ -27,7 +29,7 @@ export default function Header({name}){
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#8000ff',
+        backgroundColor: colors.headers,
         paddingTop: StatusBarHeight,
         flexDirection: 'row',
         paddingStart: 16,
@@ -42,13 +44,13 @@ const styles = StyleSheet.create({
     },
     username:{
         fontSize: 18,
-        color: '#FFF',
+        color: colors.color1,
         fontWeight: 'bold'
     },
     buttonUser:{
         width: 44,
         height: 44,
-        backgroundColor: 'rgba(255,255,255, 0.5)',
+        backgroundColor: colors.backgroundColorRGBA,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 44/2,

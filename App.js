@@ -1,8 +1,11 @@
+import AppProvider from './src/context/AppContext'
 import Home from './src/pages/Home'
 
+export default function app() {
 
-export default function app(){
   return (
-    <Home/>
+    <AppProvider>
+      <Home />
+    </AppProvider>
   )
 }
