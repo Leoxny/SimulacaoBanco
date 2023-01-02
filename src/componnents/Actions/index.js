@@ -6,7 +6,7 @@ import { AppContext } from '../../context/AppContext';
 
 export default function Actions() {
 
-    const { list, saveList } = useContext(AppContext);
+    const { list, filterList } = useContext(AppContext);
 
     console.log('LISTA DO CONTEXT=>', list)
 
@@ -16,7 +16,7 @@ export default function Actions() {
    <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false}>
 
     <TouchableOpacity 
-        onPress={() => {saveList(1)}}
+        onPress={() => {filterList(1)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="addfolder" size={26} color={'#000'}/>
@@ -25,7 +25,7 @@ export default function Actions() {
     </TouchableOpacity>
     
     <TouchableOpacity 
-        onPress={() => {saveList(2)}}
+        onPress={() => {filterList(2)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="tagso" size={26} color={'#000'}/>
@@ -34,7 +34,7 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {saveList(3)}}
+        onPress={() => {filterList(3)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="creditcard" size={26} color={'#000'}/>
@@ -43,7 +43,7 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {saveList(list)}}
+        onPress={() => {filterList(4)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="barcode" size={26} color={'#000'}/>
@@ -52,7 +52,7 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {saveList(list)}}
+        onPress={() => {filterList(5)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="setting" size={26} color={'#000'}/>
