@@ -23,7 +23,7 @@ function AppProvider({ children }) {
         console.log('CATEGORIA=>', category);
         const newList = list.filter(l => l.category == category);
 
-        //console.log('NOVA LISTA=>', newList.length);
+        console.log('NOVA LISTA=>', newList);
         setList(newList)
     }
 
