@@ -1,63 +1,60 @@
-import React, { useContext, useRef, useState } from 'react';
-import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Modal, Text, View, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import Header from '../../componnents/Header'
 import Balance from '../../componnents/Balance';
 import Movements from '../../componnents/Movements';
 import Actions from '../../componnents/Actions';
 import { AppContext } from '../../context/AppContext';
-import { Modalize } from 'react-native-modalize';
-import { Ionicons } from '@expo/vector-icons'
 import { styles } from './styles';
 import { TextInput } from 'react-native-gesture-handler';
-//import {listaPreenchida} from '../../context/AppContext'
 
 export default function App() {
 
-  const { list, filterList, saveList } = useContext(AppContext);
+  const { list, saveList, modalVisible, setModalVisible, categoria, tipo } = useContext(AppContext);
+
   const [input, setInput] = useState('')
   const [valor, setValor] = useState('')
-  const modalizeRef = useRef(null);
+  const [data, setData] = useState('')
 
 
   function handleAdd() {
-    // if (input === '') return
 
-    // if (valor === '') return
-
-    // const data = {
-    //   key: input,
-    //   list: input
-    // }
+    const id_tempo = new Date().getTime();
 
     const itemTeste = {
-      id: 4,
-      category: 4,
-      label: 'Pagamento ao banco',
-      value: '4.500,00',
-      date: '11/05/2022',
-      type: 0 // receita /entradas
+      id: id_tempo,
+      category: categoria,
+      label: input,
+      value: valor,
+      date: data,
+      type: tipo // receita /entradas
     }
-
     saveList(itemTeste);
-
+    setModalVisible(false);
   }
 
+  function getNomeCategoria(id_cat){
+    try{
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
+      if(id_cat == 1){
+        return "Entradas";
+      }else if(id_cat == 2){
+      }
 
+      //mudar para SWITCH CASE
+
+
+    }catch{
+      
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Header name="Leonardo Flach" />
-
       <Balance saldo="10.500,00" gastos="-527,00" />
-
       <Actions />
-
       <Text style={styles.title}>Últimas movimentações</Text>
-
       <FlatList
         style={styles.list}
         data={list}
@@ -66,26 +63,27 @@ export default function App() {
         renderItem={({ item }) => <Movements data={item} />}
       />
 
-      <TouchableOpacity onPress={onOpen} style={styles.fab}>
-        <Ionicons name="ios-add" size={35} color="#fff" />
-      </TouchableOpacity>
-
-      <Modalize
-        ref={modalizeRef}
-        snapPoint={500}
-      >
-        <View style={{
-          flex: 1,
-          height: 180,
-          justifyContent: 'center',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        </View>
-
+      <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+        setModalVisible(false);
+        }}
+      >     
+      <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+        <Text style={styles.modalText}>Movimentações</Text>
+        <Text style={styles.modalText}>{getNomeCategoria(categoria)}</Text>
+        <Pressable
+          style={[styles.button, styles.buttonClose]}
+          onPress={() => setModalVisible(!modalVisible)}
+            >
+        <Text style={styles.textStyle}>X</Text>
+        </Pressable>
         <TouchableOpacity>
           <View>
-            <Text style={styles.text}>Movimentações</Text>
             <TextInput
               style={styles.textInput}
               placeholder="Adicionar movimentações"
@@ -93,7 +91,15 @@ export default function App() {
               multiline={true}
               autoCorrect={false}
               value={input}
-              onChangeText={(texto) => setInput(texto)}
+              onChangeText={(input) => setInput(input)}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder="Data"
+              useNativeDriver
+              autoCorrect={false}
+              value={data}
+              onChangeText={(data) => setData(data)}
             />
             <TextInput
               style={styles.textInput}
@@ -104,18 +110,18 @@ export default function App() {
               value={valor}
               onChangeText={(valor) => setValor(valor)}
             />
-
             <TouchableOpacity style={styles.handleAdd} onPress={() => handleAdd()}>
               <Text style={styles.handleAddText}>Cadastrar</Text>
             </TouchableOpacity>
-
           </View>
-
         </TouchableOpacity>
-
-      </Modalize>
-
+      </View>
     </View>
+  </Modal>
+  </View>
+
+  </View>
+
   );
 }
 

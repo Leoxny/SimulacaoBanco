@@ -1,22 +1,23 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView,  } from 'react-native';
 import { AntDesign} from '@expo/vector-icons'
 import { styles } from './styles';
 import { AppContext } from '../../context/AppContext'; 
 
 export default function Actions() {
 
-    const { list, filterList } = useContext(AppContext);
-
-    console.log('LISTA DO CONTEXT=>', list)
-
+    const { setModalVisible, setCategoria, setTipo } = useContext(AppContext);
 
  return (
 
    <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false}>
 
-    <TouchableOpacity 
-        onPress={() => {filterList(1)}}
+    <TouchableOpacity
+        onPress={() => {
+            setCategoria(1)
+            setTipo(1)
+            setModalVisible(true)
+        }}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="addfolder" size={26} color={'#000'}/>
@@ -25,7 +26,11 @@ export default function Actions() {
     </TouchableOpacity>
     
     <TouchableOpacity 
-        onPress={() => {filterList(2)}}
+        onPress={() => {
+            setCategoria(2)
+            setTipo(0)
+            setModalVisible(true)
+        }}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="tagso" size={26} color={'#000'}/>
@@ -34,7 +39,10 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {filterList(3)}}
+        onPress={() => {
+            setCategoria(3)
+            setTipo(1)
+            setModalVisible(true)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="creditcard" size={26} color={'#000'}/>
@@ -43,7 +51,10 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {filterList(4)}}
+        onPress={() => {
+            setCategoria(4)
+            setTipo(0)
+            setModalVisible(true)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="barcode" size={26} color={'#000'}/>
@@ -52,7 +63,10 @@ export default function Actions() {
     </TouchableOpacity>
 
     <TouchableOpacity
-        onPress={() => {filterList(5)}}
+        onPress={() => {
+            setCategoria(5)
+            setTipo(1)
+            setModalVisible(true)}}
         style={styles.actionButton}>
         <View style={styles.areaButton}>
             <AntDesign name="setting" size={26} color={'#000'}/>

@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { styles } from './styles';
 
+
 export default function Movements({data}) {
+
     const [showValue, setShowValue] = useState(false);
 
  return (

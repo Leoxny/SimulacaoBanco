@@ -1,49 +1,60 @@
 import React, { createContext, useEffect, useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
+// import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AppContext = createContext({});
 
 function AppProvider({ children }) {
 
     const [list, setList] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [categoria, setCategoria] = useState(0);
+    const [tipo, setTipo] = useState(0, 1);
 
-     useEffect(() => {
-         getList();
+    //esse useEffect executa na primeira vez que o AppContext é criado, somente uma vez
+    useEffect(() => {
+        getList();
     }, [])
 
+    /*
+    -> array vazio = o useEffect será invocado sempre que o componente for renderizado
+    -> [] = array vazio = o useEffect será invocado somente na primeira renderização do componente
+    */
+
     async function getList() {
-        const dbList = await SecureStore.getItemAsync("carteira");
-        console.log('LISTA DO BANCO', dbList)
-        setList(JSON.parse(dbList));
+        const dbList = await AsyncStorage.getItem("carteira");
+
+        const dbListJson = JSON.parse(dbList);
+        console.log('LISTA DO BANCO', dbListJson)
+        setList(dbListJson);
     }
 
-    function filterList(category) {
-        //faz um filtro na lista através da categoria selecionada
-
-        console.log('CATEGORIA=>', category);
-        const newList = list.filter(l => l.category == category);
-
-        console.log('NOVA LISTA=>', newList);
-        setList(newList)
-    }
 
     function saveList(item) {
-        console.log('TESTE', item)
+        console.log('ITEM A SER SALVO', item)
         save(item)
     }
 
     async function save(item) {
-        console.log('ITEM TESTE=>', item);
-        //salva um novo item na lista
-        const newList = [...list, item];
+        try {
+            //salva um novo item na lista
+            const newList = list != null ? [...list, item] : [item];
 
-        await SecureStore.setItemAsync("carteira", JSON.stringify(newList));
-        setList(newList);
+            console.log('LISTA ATUALIZADA', newList)
+            await AsyncStorage.setItem("carteira", JSON.stringify(newList));
+            setList(newList);
+
+        } catch (err) {
+            console.log('ERRO AO SALVAR', err)
+        }
     }
 
     return (
         <AppContext.Provider value={{
-            list, filterList, saveList
+            list, saveList,
+            modalVisible, setModalVisible,
+            categoria, setCategoria,
+            tipo, setTipo
         }}>
             {children}
         </AppContext.Provider>
