@@ -13,7 +13,8 @@ function AppProvider({ children }) {
     const [categoria, setCategoria] = useState(0);
     const [tipo, setTipo] = useState(0, 1);
     const [receitas, setReceitas] = useState(0);
-    
+    const [despesas, setDespesas] = useState(0);
+
 
     //esse useEffect executa na primeira vez que o AppContext é criado, somente uma vez
     useEffect(() => {
@@ -27,17 +28,23 @@ function AppProvider({ children }) {
 
     async function getList() {
         try {
+
+            //const dbList = await AsyncStorage.removeItem("carteira")
             const dbList = await AsyncStorage.getItem("carteira");
+            
             /*
                  JSON.parse() => converte uma STRING para uma objeto do tipo JSON (object, array, string ...)
             */
-            const dbListOrder = JSON.parse(dbList).sort((a, b) => 
-                (moment(a.date, 'DD/MM/YYYY').format('YYYY-MM-DD') < moment(b.date, 'DD/MM/YYYY').format('YYYY-MM-DD') ? 1 : 
-                (moment(b.date, 'DD/MM/YYYY').format('YYYY-MM-DD') < moment(a.date, 'DD/MM/YYYY').format('YYYY-MM-DD') ? -1 : 0)));
-            //dbList = dbList.sort((a, b) => (moment(a.date,'DD/MM/YYYY').format('YYYY-MM-DD') - moment(b.date,'DD/MM/YYYY').format('YYYY-MM-DD')));
-            
-            console.log('LISTA DO BANCO', dbListOrder)
-            setList(dbListOrder);
+
+            if (dbList != null) {
+                const dbListOrder = JSON.parse(dbList).sort((a, b) =>
+                (moment(a.date, 'DD/MM/YYYY').format('YYYY-MM-DD') < moment(b.date, 'DD/MM/YYYY').format('YYYY-MM-DD') ? 1 :
+                    (moment(b.date, 'DD/MM/YYYY').format('YYYY-MM-DD') < moment(a.date, 'DD/MM/YYYY').format('YYYY-MM-DD') ? -1 : 0)));
+                //dbList = dbList.sort((a, b) => (moment(a.date,'DD/MM/YYYY').format('YYYY-MM-DD') - moment(b.date,'DD/MM/YYYY').format('YYYY-MM-DD')));
+
+                //console.log('LISTA DO BANCO', dbListOrder)
+                setList(dbListOrder);
+            }
 
         } catch (err) {
             console.log('ERRO=>', err)
@@ -45,7 +52,7 @@ function AppProvider({ children }) {
     }
 
     function saveList(item) {
-        console.log('ITEM A SER SALVO', item)
+        //console.log('ITEM A SER SALVO', item)
         save(item)
     }
 
@@ -53,13 +60,21 @@ function AppProvider({ children }) {
         try {
             //salva um novo item na lista
             const newList = list != null ? [...list, item] : [item];
+            //console.log('LISTA ATUALIZADA', newList
 
-            console.log('LISTA ATUALIZADA', newList)
+            
+            let des = 0;
+            let rec = 0;
+            list.map(item => {
+              if (item.type == 1) {
+                rec += parseFloat(item.value)
+              }else if (item.type == 0) {
+                des -= parseFloat(item.value)
+              }
+            })
 
-            let receitasMap = 0;
-            //newList.map
-
-            setReceitas(receitasMap);
+            setReceitas(rec);
+            setDespesas(des);
 
             /*
             JSON.stringify => Converte um objeto do tipo JSON para STRING
@@ -79,7 +94,8 @@ function AppProvider({ children }) {
             modalVisible, setModalVisible,
             categoria, setCategoria,
             tipo, setTipo,
-            receitas
+            receitas,
+            despesas
         }}>
             {children}
         </AppContext.Provider>

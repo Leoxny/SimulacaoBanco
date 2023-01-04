@@ -8,11 +8,12 @@ import { AppContext } from '../../context/AppContext';
 import { styles } from './styles';
 import { TextInput } from 'react-native-gesture-handler';
 import MaskInput, { Masks } from 'react-native-mask-input';
+import { normaliseValue } from '../../utils/Functions';
 
 
 export default function App() {
 
-  const { receitas, list, saveList, modalVisible, setModalVisible, categoria, tipo } = useContext(AppContext);
+  const { receitas, list, saveList, modalVisible, setModalVisible, categoria, despesas, tipo } = useContext(AppContext);
 
   const [input, setInput] = useState('')
   const [valor, setValor] = useState('')
@@ -27,15 +28,12 @@ export default function App() {
       id: id_tempo,
       category: categoria,
       label: input,
-      value1: valor,
-      value2: valorUnmask, // adicionar um ponto
+      value: normaliseValue(valorUnmask),
       date: data,
       type: tipo // receita / despesa
     }
 
-    console.log('ITEM => ', payload)
-
-    //saveList(payload);
+    saveList(payload);
     setModalVisible(false);
   }
 
@@ -67,7 +65,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Header name="Leonardo Flach" />
-      <Balance saldo={receitas} gastos={0} />
+      <Balance saldo={receitas} gastos={despesas} />
       <Actions />
       <Text style={styles.title}>Últimas movimentações</Text>
       <FlatList
@@ -105,6 +103,7 @@ export default function App() {
                   <MaskInput
                     style={styles.textInput}
                     placeholder="Digite sua data"
+                    keyboardType="numeric"
                     useNativeDriver
                     mask={Masks.DATE_DDMMYYYY}
                     autoCorrect={false}

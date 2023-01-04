@@ -16,7 +16,7 @@ export default function Movements({data}) {
 
             {showValue? (
              <Text style={data.type === 1 ? styles.value : styles.expenses}> 
-                {data.type === 1 ? `${data.value}` : `-${data.value}`}
+                {data.type === 1 ? `R$${data.value}` : `R$-${data.value}`}
             </Text>
             ) : (
                 <View style={styles.skeleton}>
