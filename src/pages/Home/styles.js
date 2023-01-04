@@ -74,15 +74,5 @@ export const styles = StyleSheet.create({
     buttonOpen: {
       backgroundColor: "#F194FF",
     },
-    buttonClose: {
-      backgroundColor: "#2196F3",
-    },
-    textStyle: {
-      color: "red",
-      fontWeight: "bold",
-      textAlign: "center",
-      marginLeft: 260,
-      marginTop: -80
-    },
   });
   

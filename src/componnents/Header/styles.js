@@ -1,9 +1,11 @@
 // import { StyleSheet } from "react-native";
 // import { colors } from "../../themes/Theme";
 
+// const StatusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 22 : 64;
+
 // export const styles = StyleSheet.create({
 //     container:{
-//         backgroundColor: colors.backgroundColor,
+//         backgroundColor: colors.headers,
 //         paddingTop: StatusBarHeight,
 //         flexDirection: 'row',
 //         paddingStart: 16,
@@ -18,13 +20,13 @@
 //     },
 //     username:{
 //         fontSize: 18,
-//         color: colors.color,
+//         color: colors.color1,
 //         fontWeight: 'bold'
 //     },
 //     buttonUser:{
 //         width: 44,
 //         height: 44,
-//         backgroundColor: colors.backgroundColor,
+//         backgroundColor: colors.backgroundColorRGBA,
 //         alignItems: 'center',
 //         justifyContent: 'center',
 //         borderRadius: 44/2,
