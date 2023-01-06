@@ -3,8 +3,8 @@ import { colors } from "../../themes/Theme";
 
 export const styles = StyleSheet.create({
     container:{
-        maxHeight: 84,
-        marginBottom: 14,
+        maxHeight: 90,
+        marginBottom: 20,
         marginTop: 18,
         paddingEnd: 14,
         paddingStart: 14,

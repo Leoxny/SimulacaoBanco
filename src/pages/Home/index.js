@@ -1,24 +1,29 @@
 import React, { useContext, useState } from 'react';
 import { Modal, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Header from '../../componnents/Header'
-import Balance, { saldo, gastos } from '../../componnents/Balance';
+import Balance from '../../componnents/Balance';
 import Movements from '../../componnents/Movements';
 import Actions from '../../componnents/Actions';
 import { AppContext } from '../../context/AppContext';
 import { styles } from './styles';
 import { TextInput } from 'react-native-gesture-handler';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import { normaliseValue } from '../../utils/Functions';
+import { normaliseValue, formatNumber, formatMoneyNew, formatMoney } from '../../utils/Functions';
 
 
 export default function App() {
 
   const { receitas, list, saveList, modalVisible, setModalVisible, categoria, despesas, tipo } = useContext(AppContext);
 
-  const [input, setInput] = useState('')
-  const [valor, setValor] = useState('')
-  const [valorUnmask, setValorUnmask] = useState('')
-  const [data, setData] = useState('')
+  const movimentoVazio = {
+    texto: '',
+    valor: '',
+    valorUnmask: '',
+    data: '',
+    type: 0
+  }
+
+  const [movimento, setMovimento] = useState(movimentoVazio)
 
   function handleAdd() {
 
@@ -27,14 +32,16 @@ export default function App() {
     const payload = {
       id: id_tempo,
       category: categoria,
-      label: input,
-      value: normaliseValue(valorUnmask),
-      date: data,
+      label: movimento.texto,
+      value: normaliseValue(movimento.valorUnmask),
+      date: movimento.data,
       type: tipo // receita / despesa
     }
 
     saveList(payload);
     setModalVisible(false);
+    setMovimento(movimentoVazio);
+
   }
 
   function getNomeCategoria(id_cat) {
@@ -51,7 +58,6 @@ export default function App() {
           return "Boletos";
         case 5:
           return "Conta";
-          break;
         default:
           return "Não encontrado";
       }
@@ -65,7 +71,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Header name="Leonardo Flach" />
-      <Balance saldo={receitas} gastos={despesas} />
+      <Balance receitas={formatMoneyNew(receitas)} despesas={formatMoneyNew(despesas)}/>
       <Actions />
       <Text style={styles.title}>Últimas movimentações</Text>
       <FlatList
@@ -97,30 +103,31 @@ export default function App() {
                     useNativeDriver
                     multiline={true}
                     autoCorrect={false}
-                    value={input}
-                    onChangeText={(input) => setInput(input)}
+                    value={movimento.texto}
+                    onChangeText={(texto) => setMovimento({ ...movimento, texto: texto })}
                   />
                   <MaskInput
                     style={styles.textInput}
                     placeholder="Digite sua data"
                     keyboardType="numeric"
                     useNativeDriver
+                    multiline={true}
                     mask={Masks.DATE_DDMMYYYY}
                     autoCorrect={false}
-                    value={data}
-                    onChangeText={(data) => setData(data)}
+                    value={movimento.data}
+                    onChangeText={(data) => setMovimento({...movimento, data: data})}
                   />
                   <MaskInput
                     style={styles.textInput}
                     placeholder="Valor"
                     keyboardType="numeric"
                     useNativeDriver
+                    multiline={true}
                     mask={Masks.BRL_CURRENCY}
                     autoCorrect={false}
-                    value={valor}
-                    onChangeText={(masked, unmasked) => {
-                      setValor(masked)
-                      setValorUnmask(unmasked)
+                    value={movimento.valorUnmask}
+                    onChangeText={(valor, valorUnmask) => {
+                      setMovimento({...movimento, valor: valor, valorUnmask: valorUnmask})
                     }}
                   />
                   <TouchableOpacity style={styles.handleAdd} onPress={() => handleAdd()}>

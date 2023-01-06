@@ -1,8 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
-// import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from "moment";
-//import 'moment-timezone';
 
 export const AppContext = createContext({});
 
@@ -14,6 +12,8 @@ function AppProvider({ children }) {
     const [tipo, setTipo] = useState(0, 1);
     const [receitas, setReceitas] = useState(0);
     const [despesas, setDespesas] = useState(0);
+
+    const [visible, setVisible] = useState(false);
 
 
     //esse useEffect executa na primeira vez que o AppContext é criado, somente uma vez
@@ -29,9 +29,9 @@ function AppProvider({ children }) {
     async function getList() {
         try {
 
-            //const dbList = await AsyncStorage.removeItem("carteira")
+            //await AsyncStorage.removeItem("carteira");
             const dbList = await AsyncStorage.getItem("carteira");
-            
+
             /*
                  JSON.parse() => converte uma STRING para uma objeto do tipo JSON (object, array, string ...)
             */
@@ -44,6 +44,7 @@ function AppProvider({ children }) {
 
                 //console.log('LISTA DO BANCO', dbListOrder)
                 setList(dbListOrder);
+                updateValues(dbListOrder);
             }
 
         } catch (err) {
@@ -56,25 +57,39 @@ function AppProvider({ children }) {
         save(item)
     }
 
+   async function updateValues(list){
+
+    try{
+
+        let des = 0
+        let rec = 0;
+
+        list.map(item => {
+          if (item.type == 1) {
+            rec += parseFloat(item.value)
+          }else if (item.type == 0) {
+            des -= parseFloat(item.value)
+          }
+        })
+
+        setReceitas(rec);
+        setDespesas(des);
+
+        console.log('FORMATO DA GRANA =>', rec, des)
+
+
+    }catch(err){
+        console.log('ERRO AO SALVAR', err)
+    }
+
+    }
+
     async function save(item) {
         try {
             //salva um novo item na lista
             const newList = list != null ? [...list, item] : [item];
-            //console.log('LISTA ATUALIZADA', newList
-
             
-            let des = 0;
-            let rec = 0;
-            list.map(item => {
-              if (item.type == 1) {
-                rec += parseFloat(item.value)
-              }else if (item.type == 0) {
-                des -= parseFloat(item.value)
-              }
-            })
-
-            setReceitas(rec);
-            setDespesas(des);
+            updateValues(newList)
 
             /*
             JSON.stringify => Converte um objeto do tipo JSON para STRING
@@ -95,7 +110,8 @@ function AppProvider({ children }) {
             categoria, setCategoria,
             tipo, setTipo,
             receitas,
-            despesas
+            despesas,
+            visible, setVisible
         }}>
             {children}
         </AppContext.Provider>

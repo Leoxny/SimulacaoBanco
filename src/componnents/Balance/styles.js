@@ -38,5 +38,12 @@ export const styles = StyleSheet.create({
     expenses:{
         fontSize: 22,
         color: colors.color3
+    },
+    skeleton:{
+        marginTop: 6,
+        width: 80,
+        height: 10,
+        backgroundColor: colors.color1,
+        borderRadius: 8,
     }
 })
